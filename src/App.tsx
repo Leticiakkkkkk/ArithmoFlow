@@ -7,6 +7,8 @@ function App() {
     const [n] = useState(240);
     const [speed, setSpeed] = useState(500);
     const [isAuto, setIsAuto] = useState(false);
+    const [kernel, setKernel] = useState<'sieve' | 'euclid'>('sieve');
+
     const { currentStep, status, start, next, reset } = useAlgorithm();
     
     const displayNumbers = currentStep 
@@ -43,6 +45,18 @@ function App() {
                     </div>
 
                     <div className="flex items-center gap-10">
+                        <div className="text-right hidden sm:block">
+                            <p className="text-[9px] text-slate-700 uppercase tracking-widest mb-1">Active_Core</p>
+                            <select 
+                                className="bg-transparent text-xs text-slate-400 font-serif italic focus:outline-none cursor-pointer"
+                                value={kernel}
+                                onChange={(e) => setKernel(e.target.value as 'sieve' | 'euclid')}
+                            >
+                                <option value="sieve">Sieve of Eratosthenes</option>
+                                <option value="euclid">Euclidean Algorithm</option>
+                            </select>
+                        </div>
+
                         <div className="flex gap-8 items-center border-r border-slate-900 pr-10">
                             <div className="flex flex-col gap-1">
                                 <span className="text-[8px] text-slate-700 uppercase tracking-tighter">Clock_Speed</span>
@@ -150,16 +164,33 @@ function App() {
                             <h2 className="text-[10px] text-slate-700 uppercase tracking-[0.4em]">Teoria Fundamental</h2>
                         </div>
                         <div className="flex gap-4 items-start border-b border-slate-900 pb-8">
-                            <div className="w-20 h-24 bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden grayscale opacity-75 flex-shrink-0 p-0.5 shadow-2xl">
-                                <img 
-                                    src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Portrait_of_Eratosthenes.png" 
-                                    alt="Retrato de Eratóstenes" 
-                                    className="w-full h-full object-cover contrast-125 brightness-90"
-                                />
-                            </div>
-                            <p className="text-[11px] text-slate-500 leading-relaxed font-light italic">
-                                "O Crivo elimina múltiplos compostos, reduzindo drasticamente o esforço computacional."
-                            </p>
+                            {kernel === 'sieve' ? (
+                                <>
+                                    <div className="w-20 h-24 bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden grayscale opacity-75 flex-shrink-0 p-0.5 shadow-2xl">
+                                        <img 
+                                            src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Portrait_of_Eratosthenes.png" 
+                                            alt="Retrato de Eratóstenes" 
+                                            className="w-full h-full object-cover contrast-125 brightness-90"
+                                        />
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-light italic">
+                                        "O Crivo elimina múltiplos compostos, reduzindo drasticamente o esforço computacional."
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-20 h-24 bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden grayscale opacity-75 flex-shrink-0 p-0.5 shadow-2xl">
+                                        <img 
+                                            src="https://lh3.googleusercontent.com/proxy/QOOBbzQ743eFfr55CSHm85yHs3diK-sV0RS2U2ql-HJa1pNC1s8EvFyk8GgIXu7dAJNY8p7axxlWvCD4V4rRCUUUO7ez2vD5Tt4" 
+                                            alt="Retrato de Euclides" 
+                                            className="w-full h-full object-cover contrast-125 brightness-90"
+                                        />
+                                    </div>
+                                    <p className="text-[11px] text-slate-500 leading-relaxed font-light italic">
+                                        "O Algoritmo de Euclides reduz iterativamente (a, b) ao resto — eficiente para gcd e operações modulares."
+                                    </p>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -167,9 +198,11 @@ function App() {
                         <h2 className="text-[10px] text-slate-700 uppercase tracking-[0.4em]">Analysis_Metric</h2>
                         <div className="space-y-1">
                             <span className="text-4xl font-light text-slate-300 tracking-tighter block font-serif italic">
-                                O(n log log n)
+                                {kernel === 'sieve' ? 'O(n log log n)' : 'O(log n)'}
                             </span>
-                            <span className="text-[9px] text-slate-600 uppercase tracking-widest italic">Complexidade Assintótica</span>
+                            <span className="text-[9px] text-slate-600 uppercase tracking-widest italic">
+                                {kernel === 'sieve' ? 'Complexidade Assintótica' : 'Complexidade Assintótica (GCD)'}
+                            </span>
                         </div>
                     </div>
 
