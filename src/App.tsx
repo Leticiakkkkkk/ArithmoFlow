@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NumberCell } from "./components/NumberCell";
 import { useAlgorithm } from "./hooks/useAlgorithm";
-import { Play, RotateCcw, Github, Linkedin, Cpu, ChevronRight, BookOpen, Zap, CheckCircle2 } from "lucide-react";
+import { Play, RotateCcw, Github, Linkedin, Cpu, ChevronRight, BookOpen, CheckCircle2 } from "lucide-react";
 
 function App() {
     const [n] = useState(240);
@@ -11,7 +11,7 @@ function App() {
     const [isAuto, setIsAuto] = useState(false);
     const [kernel, setKernel] = useState<'sieve' | 'euclid'>('sieve');
 
-    const { currentStep, status, start, next, reset } = useAlgorithm(kernel);
+    const { currentStep, status, start, next, reset, history } = useAlgorithm(kernel);
     
     const displayNumbers = currentStep && kernel === 'sieve'
         ? currentStep.state.numbers 
@@ -42,7 +42,7 @@ function App() {
                             ArithmoFlow
                         </h1>
                         <p className="text-[10px] text-slate-600 tracking-[0.4em] uppercase font-bold">
-                            Interactive Algorithm Execution Engine // Logic Swap Phase
+                            Visual Number Lab
                         </p>
                     </div>
 
@@ -55,6 +55,7 @@ function App() {
                                 onChange={(e) => {
                                     setKernel(e.target.value as 'sieve' | 'euclid');
                                     reset();
+                                    setIsAuto(false);
                                 }}
                             >
                                 <option value="sieve">Sieve of Eratosthenes</option>
@@ -131,40 +132,44 @@ function App() {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-full animate-in slide-in-from-bottom-4 duration-700 space-y-12">
+                        <div className="max-w-4xl mx-auto space-y-16 animate-in slide-in-from-bottom-4 duration-700 h-full flex flex-col justify-center">
                             {status === "idle" ? (
-                                <div className="flex gap-12">
-                                    <div className="space-y-2">
-                                        <p className="text-[9px] text-slate-700 uppercase tracking-widest text-center italic">Parameter_A</p>
+                                <div className="flex gap-20 border-b border-slate-900 pb-12">
+                                    <div className="space-y-4 flex-1">
+                                        <p className="text-[10px] text-slate-700 uppercase tracking-[0.3em] font-bold">Input_Dividend (a)</p>
                                         <input 
                                             type="number" 
                                             value={inputA} 
                                             onChange={(e) => setInputA(Number(e.target.value))}
-                                            className="bg-transparent border-b border-slate-900 text-3xl text-slate-200 text-center w-32 focus:outline-none focus:border-orange-500/50 transition-colors font-serif italic"
+                                            className="bg-transparent border-b border-transparent focus:border-orange-500/30 text-5xl text-slate-200 w-full focus:outline-none transition-colors font-serif italic"
                                         />
                                     </div>
-                                    <div className="space-y-2">
-                                        <p className="text-[9px] text-slate-700 uppercase tracking-widest text-center italic">Parameter_B</p>
+                                    <div className="space-y-4 flex-1">
+                                        <p className="text-[10px] text-slate-700 uppercase tracking-[0.3em] font-bold">Input_Divisor (b)</p>
                                         <input 
                                             type="number" 
                                             value={inputB} 
                                             onChange={(e) => setInputB(Number(e.target.value))}
-                                            className="bg-transparent border-b border-slate-900 text-3xl text-slate-200 text-center w-32 focus:outline-none focus:border-orange-500/50 transition-colors font-serif italic"
+                                            className="bg-transparent border-b border-transparent focus:border-orange-500/30 text-5xl text-slate-200 w-full focus:outline-none transition-colors font-serif italic"
                                         />
                                     </div>
                                 </div>
                             ) : (
-                                <div className="space-y-8 max-w-2xl w-full">
-                                    <div className="text-center space-y-4">
-                                        <p className="text-6xl text-slate-100 font-serif italic tracking-tighter transition-all duration-500">
-                                            {currentStep?.state.stepDescription || "a = q(b) + r"}
-                                        </p>
-                                        {status === "finished" && (
-                                            <p className="text-xs text-emerald-500 uppercase tracking-[0.6em] animate-pulse pt-8 font-bold">
-                                                GCD_FOUND_ABSOLUTE
+                                <div className="space-y-6 font-serif italic text-3xl">
+                                    {history?.map((step: any, i: number) => (
+                                        <div key={i} className="flex items-baseline gap-10 animate-in fade-in slide-in-from-left-4 duration-500 opacity-30 last:opacity-100 last:text-slate-100">
+                                            <span className="text-[10px] font-mono uppercase text-slate-800 tracking-widest not-italic">Step_{String(i + 1).padStart(2, '0')}</span>
+                                            <span>{step.state.stepDescription}</span>
+                                        </div>
+                                    ))}
+                                    {status === "finished" && (
+                                        <div className="pt-12 animate-in zoom-in-95 duration-700">
+                                            <p className="text-[10px] text-emerald-500 uppercase tracking-[0.8em] font-bold mb-2 not-italic">Result_MDC</p>
+                                            <p className="text-6xl text-emerald-400 tracking-tighter shadow-emerald-500/20 drop-shadow-2xl">
+                                                {currentStep?.state.a}
                                             </p>
-                                        )}
-                                    </div>
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -179,14 +184,9 @@ function App() {
                         </div>
                         <div className="space-y-6 min-h-[120px]">
                             {currentStep ? (
-                                <>
-                                    <p className="text-2xl text-slate-200 leading-tight font-serif italic animate-in fade-in duration-500">
-                                        "{currentStep.description}"
-                                    </p>
-                                    <p className="text-xs text-slate-500 leading-relaxed font-light lowercase opacity-50">
-                                        kernel::{kernel}_operation_logged
-                                    </p>
-                                </>
+                                <p className="text-2xl text-slate-200 leading-tight font-serif italic animate-in fade-in duration-500">
+                                    "{currentStep.description}"
+                                </p>
                             ) : (
                                 <p className="text-xs text-slate-700 italic font-serif">
                                     Aguardando inicialização do núcleo...
@@ -204,12 +204,12 @@ function App() {
                     </div>
 
                     <div className="space-y-6 pt-8 border-t border-slate-900/30">
-                        <div className="flex items-center gap-2">
-                            <BookOpen size={12} className="text-slate-700" />
-                            <h2 className="text-[10px] text-slate-700 uppercase tracking-[0.4em]">Teoria Fundamental</h2>
+                        <div className="flex items-center gap-2 text-slate-700">
+                            <BookOpen size={12} />
+                            <h2 className="text-[10px] uppercase tracking-[0.4em]">Teoria Fundamental</h2>
                         </div>
                         <div className="flex gap-4 items-start border-b border-slate-900 pb-8">
-                            <div className="w-20 h-24 bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden grayscale opacity-75 flex-shrink-0 p-0.5 shadow-2xl">
+                            <div className="w-20 h-24 bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden grayscale opacity-75 flex-shrink-0 p-0.5 shadow-2xl transition-all duration-700 hover:grayscale-0">
                                 <img 
                                     src={kernel === 'sieve' 
                                         ? "https://upload.wikimedia.org/wikipedia/commons/a/a2/Portrait_of_Eratosthenes.png" 
@@ -221,7 +221,7 @@ function App() {
                             <p className="text-[11px] text-slate-500 leading-relaxed font-light italic">
                                 {kernel === 'sieve' 
                                     ? '"O Crivo elimina múltiplos compostos, reduzindo o esforço computacional."' 
-                                    : '"Euclides provou que o MDC não muda se o maior número for substituído pelo resto da divisão."'}
+                                    : '"O MDC não muda se o maior número for substituído pelo resto da sua divisão pelo menor."'}
                             </p>
                         </div>
                     </div>
@@ -255,19 +255,28 @@ function App() {
 
             <footer className="w-full border-t border-slate-900 px-6 xl:px-12 py-10 bg-[#0a0a0a]">
                 <div className="w-full flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] tracking-[0.3em] uppercase font-bold text-slate-600">
-                    <div className="flex items-center gap-3">
-                        <Cpu size={12} className="text-slate-800" />
-                        <span className="text-slate-800">Authored_by</span>
-                        <span className="text-slate-300 italic tracking-normal">LETICIA CELESTINO</span>
+                    <div className="flex flex-col md:flex-row items-center gap-10">
+                        <div className="flex items-center gap-3">
+                            <Cpu size={12} className="text-slate-800" />
+                            <span className="text-slate-800">Authored_by</span>
+                            <span className="text-slate-300 italic tracking-normal">LETICIA CELESTINO</span>
+                        </div>
+                        <div className="hidden md:block w-[1px] h-3 bg-slate-900" />
+                        <div className="flex items-center gap-3">
+                            <span className="text-slate-800">Concept</span>
+                            <span className="text-slate-500 italic tracking-normal">Visual Analysis of Classical Algorithms</span>
+                        </div>
                     </div>
+
                     <div className="flex items-center gap-10">
-                        <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-orange-500 transition-colors flex items-center gap-2">
-                            <Github size={12} /> GitHub
+                        <a href="https://github.com/Leticiakkkkkk" target="_blank" rel="noreferrer" className="hover:text-orange-500 transition-colors flex items-center gap-2 group">
+                            <Github size={12} /> <span className="group-hover:underline">GitHub</span>
                         </a>
-                        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-orange-500 transition-colors flex items-center gap-2">
-                            <Linkedin size={12} /> LinkedIn
+                        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-orange-500 transition-colors flex items-center gap-2 group">
+                            <Linkedin size={12} /> <span className="group-hover:underline">LinkedIn</span>
                         </a>
-                        <span className="text-slate-700 tracking-widest text-[9px]">© 2026 // KERNEL_{kernel.toUpperCase()}</span>
+                        <div className="hidden md:block w-[1px] h-3 bg-slate-900" />
+                        <span className="text-slate-700 tracking-widest text-[9px]">© {new Date().getFullYear()}</span>
                     </div>
                 </div>
             </footer>
