@@ -1,73 +1,52 @@
-# React + TypeScript + Vite
+# ArithmoFlow
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Interactive Algorithm Execution Engine // Visual Analysis of Classical Algorithms**
 
-Currently, two official plugins are available:
+ArithmoFlow is a mathematically rigorous, visually minimalist engine built to visualize the execution of classical computational algorithms in real-time. Designed with architectural scalability and low-level execution control in mind, it transforms static theory into an interactive, step-by-step computational ledger.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Current Architecture State: Phase 4 (Multi-Kernel Logic Swap)
 
-## React Compiler
+The system currently operates on a bivalent engine architecture, utilizing the **Strategy Pattern** to decouple the user interface from the underlying algorithmic logic. This allows the core engine to seamlessly swap visualization paradigms based on the active mathematical kernel.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Active Kernels
+*   **Sieve of Eratosthenes (`kernel::sieve`)**
+    *   **Paradigm:** Batch elimination and array processing.
+    *   **Complexity:** $O(n \log \log n)$
+    *   **Visualization:** Dynamic rendering of a prime number grid, visually eliminating composite numbers in real-time.
+*   **Euclidean Algorithm (`kernel::euclid`)**
+    *   **Paradigm:** Successive division and modular arithmetic.
+    *   **Complexity:** $O(\log(\min(a, b)))$
+    *   **Visualization:** An elegant, typography-focused mathematical ledger displaying $a = q \times b + r$ iterative steps until the Greatest Common Divisor (GCD) is found.
 
-## Expanding the ESLint configuration
+## ✨ Key Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+*   **Multi-Kernel Engine:** Seamless hot-swapping between distinct algorithmic logic cores without UI degradation.
+*   **Execution Control:** Adjustable clock speed (0.5x, 1.0x, 2.5x), manual step-by-step processing, and auto-running capabilities.
+*   **Live Stream Logging:** Real-time descriptive logging of the active kernel's memory state and mathematical operations.
+*   **Dynamic Complexity Metrics:** Real-time updates of Big O asymptotic complexity based on the active execution context.
+*   **Engineering Manuscript UI:** A highly polished, distraction-free interface built with monospace UI elements and serif typography for mathematical formulas.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+*   **Core:** React 18, TypeScript
+*   **Styling:** Tailwind CSS (utility-first, minimalist design system)
+*   **Icons:** Lucide React
+*   **State Management:** Custom React Hooks (`useAlgorithm`) for polymorphic generator orchestration.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ⚙️ Local Environment Setup
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Ensure you have Node.js installed, then clone the repository:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+# Clone the repository
+git clone [https://github.com/Leticiakkkkkk/ArithmoFlow.git](https://github.com/Leticiakkkkkk/ArithmoFlow.git)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Navigate into the directory
+cd ArithmoFlow
+
+# Install dependencies
+npm install
+
+# Start the execution engine
+npm run dev
 ```
